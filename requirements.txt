@@ -1,0 +1,8 @@
+black==22.1.0
+click==8.0.3
+# Editable install with no version control (la-stopwatch==0.0.3)
+-e /media/thiagola92/LinuxHD/Documents/la-timer
+mypy-extensions==0.4.3
+pathspec==0.9.0
+platformdirs==2.5.0
+tomli==2.0.1
