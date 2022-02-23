@@ -5,9 +5,10 @@ Measure the amount of time that elapses between *lap times*.
 `pip install la-stopwatch`  
 
 # usage
-There is two versions of stopwatch: 
-    - `StopwatchNS`
-    - `Stopwatch`
+There is two versions of stopwatch:  
+  - `StopwatchNS`
+  - `Stopwatch`
+
 While both measure using nanoseconds, the second option convert nanoseconds to `timedelta` before returning any time measurement. All examples will be using `Stopwatch` but both have the same methods, but you should expect only integers when dealing with `StopwatchNS`.  
 
 Time start when `Stopwatch` is created.  
@@ -53,7 +54,7 @@ print(stopwatch.get_record(0))
 print(stopwatch.get_record("last record"))
 ```
 
-Some methods return the stopwatch so you can chain method calls. For example, you can record how much time take to open each file if you reset every time after recording.  
+Some methods return the `Stopwatch` so you can chain method calls. For example, you can record how much time take to open each file if you reset every time after recording.  
 ```python
 from la_stopwatch import Stopwatch
 
@@ -71,20 +72,20 @@ stopwatch.record().reset()
 print(stopwatch.get_records())
 ```
 
-The `log()` method will print on screen and record the *lap time*.  
+Use `log()` method to print/log the duration and record the *lap time* at the same time.  
 ```python
+from logging import getLogger, basicConfig
 from la_stopwatch import Stopwatch
 
 stopwatch = Stopwatch()
 
 with open("filename1", "r") as f:
     raw = f.readlines()
-
-# Duration: 0:00:00.000160
+    
+# print the duration with `print()`
 stopwatch.log("Duration: %(duration)s")
 ```
 
-If instead of `print()` you want to use a `Logger.debug()`, you can do it passing the logger in the constructor.  
 ```python
 from logging import getLogger, basicConfig
 from la_stopwatch import Stopwatch
@@ -96,32 +97,29 @@ stopwatch = Stopwatch(getLogger())
 with open("filename1", "r") as f:
     raw = f.readlines()
 
-# DEBUG:root:Duration: 0:00:00.000160
+# log the duration with `logger.debug()`
 stopwatch.log("Duration: %(duration)s")
 ```
 
 There is support for context manager.  
 ```python
+from logging import getLogger, basicConfig
 from la_stopwatch import Stopwatch
+
 
 with Stopwatch() as stopwatch:
     with open("filename1", "r") as f:
         raw = f.readlines()
-    
-    print(stopwatch) # 0:00:00.000292
-```
+    print(stopwatch)
 
-A message can be pass to the constructor and will only be used when exiting the context manager.  
-```python
-from logging import getLogger, basicConfig
-from la_stopwatch import Stopwatch
 
-# Using print
+# At the end of the context manager, print the duration with `print()`
 with Stopwatch(msg="Duration: %(duration)s"):
     with open("filename1", "r") as f:
         raw = f.readlines()
 
-# Using logger
+
+# At the end of the context manager, log the duration with `logger.debug()`
 basicConfig(level=0)
 with Stopwatch(logger=getLogger(), msg="Duration: %(duration)s"):
     with open("filename1", "r") as f:
