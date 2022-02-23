@@ -1,17 +1,27 @@
 from time import time_ns
 from copy import deepcopy
+from logging import Logger
 from datetime import timedelta
 
 
 class Stopwatch:
-    def __init__(self):
+    def __init__(self, logger: Logger = ..., msg: str = ..., *args, **kwargs):
         self._records: dict[timedelta] = {}
+
+        self._logger = logger
+        self._msg = msg
+        self._args = args
+        self._kwargs = kwargs
+
         self.reset()
 
     def __enter__(self):
         return self
 
     def __exit__(self, type, value, traceback) -> bool:
+        if isinstance(self._msg, str):
+            self._log(self._msg, self.duration(), *self._args, **self._kwargs)
+
         return False
 
     def __str__(self) -> str:
@@ -31,10 +41,30 @@ class Stopwatch:
     def duration(self) -> timedelta:
         return timedelta(microseconds=(time_ns() - self._start) / 1000)
 
-    def record(self, name: str = None):
-        if name is None:
+    def record(self, name: str = ...):
+        if not isinstance(name, str):
             name = len(self._records)
 
         self._records[name] = self.duration()
 
         return self
+
+    def log(self, msg: str, name: str = ..., *args, **kwargs):
+        if not isinstance(name, str):
+            name = len(self._records)
+
+        self._records[name] = self.duration()
+
+        self._log(msg, self._records[name], *args, **kwargs)
+
+        return self
+
+    def _log(self, msg: str, duration: timedelta, *args, **kwargs) -> None:
+        msg = msg % {"duration": duration}
+        args = args or self._args
+        kwargs = kwargs or self._kwargs
+
+        if isinstance(self._logger, Logger):
+            self._logger.debug(msg, *args, **kwargs)
+        else:
+            print(msg, *args, **kwargs)

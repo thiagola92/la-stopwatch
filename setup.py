@@ -5,7 +5,7 @@ long_description = Path("README.md").read_text()
 
 setup(
     name="la-stopwatch",
-    version="0.0.3",
+    version="0.0.1",
     description="Time",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -14,11 +14,11 @@ setup(
     author_email="thiagola92@gmail.com",
     classifiers=[
         "License :: OSI Approved :: MIT License",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.10",
         "Operating System :: OS Independent",
     ],
     keywords="stopwatch, timer, timing, clock",
     license="MIT",
     packages=find_packages(exclude=["tests"]),
-    python_requires=">=3.7",
+    python_requires=">=3.10",
 )
