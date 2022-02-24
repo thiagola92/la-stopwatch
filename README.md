@@ -98,7 +98,7 @@ from la_stopwatch import Stopwatch
 
 basicConfig(level=0)
 
-stopwatch = Stopwatch(getLogger())
+stopwatch = Stopwatch(logger=getLogger())
 
 with open("filename1", "r") as f:
     raw = f.readlines()
@@ -113,7 +113,7 @@ There is support for context manager.
 from la_stopwatch import Stopwatch
 
 
-with Stopwatch(msg="Duration: %(duration)s"):
+with Stopwatch("Duration: %(duration)s"):
     with open("filename1", "r") as f:
         raw = f.readlines()
 ```
@@ -123,7 +123,7 @@ And support for decorator.
 from la_stopwatch import Stopwatch
 
 
-@Stopwatch(msg="Duration: %(duration)s")
+@Stopwatch("Duration: %(duration)s")
 def open_file():
     with open("filename1", "r") as f:
         raw = f.readlines()
