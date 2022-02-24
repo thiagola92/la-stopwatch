@@ -15,6 +15,7 @@ Time start when `Stopwatch` is created.
 ```python
 from la_stopwatch import Stopwatch
 
+
 stopwatch = Stopwatch()
 
 with open("filename1", "r") as f:
@@ -26,6 +27,7 @@ print(stopwatch) # 0:00:00.000292
 Record each *lap time* for future analysis.  
 ```python
 from la_stopwatch import Stopwatch
+
 
 stopwatch = Stopwatch()
 
@@ -58,6 +60,7 @@ Some methods return the `Stopwatch` so you can chain method calls. For example, 
 ```python
 from la_stopwatch import Stopwatch
 
+
 stopwatch = Stopwatch()
 
 with open("filename1", "r") as f:
@@ -77,6 +80,7 @@ Use `log()` method to print/log the duration and record the *lap time* at the sa
 from logging import getLogger, basicConfig
 from la_stopwatch import Stopwatch
 
+
 stopwatch = Stopwatch()
 
 with open("filename1", "r") as f:
@@ -90,6 +94,7 @@ stopwatch.log("Duration: %(duration)s")
 ```python
 from logging import getLogger, basicConfig
 from la_stopwatch import Stopwatch
+
 
 basicConfig(level=0)
 
