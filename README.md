@@ -9,7 +9,7 @@ There is two versions of stopwatch:
   - `StopwatchNS`
   - `Stopwatch`
 
-While both measure using nanoseconds, the second option convert nanoseconds to `timedelta` before returning any time measurement. All examples will be using `Stopwatch` but both have the same methods, but you should expect only integers when dealing with `StopwatchNS`.  
+While both measure using nanoseconds, the second option convert nanoseconds to `timedelta` before returning any time measurement. All examples will be using `Stopwatch` but both have the same methods, you should expect only integers when dealing with `StopwatchNS`.  
 
 Time start when `Stopwatch` is created.  
 ```python
@@ -83,6 +83,7 @@ with open("filename1", "r") as f:
     raw = f.readlines()
     
 # print the duration with `print()`
+# "Duration: 0:00:00.005309"
 stopwatch.log("Duration: %(duration)s")
 ```
 
@@ -98,30 +99,27 @@ with open("filename1", "r") as f:
     raw = f.readlines()
 
 # log the duration with `logger.debug()`
+# "DEBUG:root:Duration: 0:00:00.005309"
 stopwatch.log("Duration: %(duration)s")
 ```
 
 There is support for context manager.  
 ```python
-from logging import getLogger, basicConfig
 from la_stopwatch import Stopwatch
 
 
-with Stopwatch() as stopwatch:
-    with open("filename1", "r") as f:
-        raw = f.readlines()
-    print(stopwatch)
-
-
-# At the end of the context manager, print the duration with `print()`
 with Stopwatch(msg="Duration: %(duration)s"):
     with open("filename1", "r") as f:
         raw = f.readlines()
+```
+
+And support for decorator.  
+```python
+from la_stopwatch import Stopwatch
 
 
-# At the end of the context manager, log the duration with `logger.debug()`
-basicConfig(level=0)
-with Stopwatch(logger=getLogger(), msg="Duration: %(duration)s"):
+@Stopwatch(msg="Duration: %(duration)s")
+def open_file():
     with open("filename1", "r") as f:
         raw = f.readlines()
 ```
