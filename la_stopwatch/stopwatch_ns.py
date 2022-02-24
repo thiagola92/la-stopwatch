@@ -5,17 +5,19 @@ from logging import Logger
 
 
 class StopwatchNS:
-    def __init__(self, logger: Logger = ..., msg: str = ..., *args, **kwargs):
+    def __init__(self, msg: str = ..., logger: Logger = ..., *args, **kwargs):
         self._records: dict[int] = {}
 
-        self._logger = logger
         self._msg = msg
+        self._logger = logger
         self._args = args
         self._kwargs = kwargs
 
         self.reset()
 
     def __enter__(self):
+        self.reset()
+
         return self
 
     def __exit__(self, type, value, traceback) -> bool:
@@ -23,11 +25,12 @@ class StopwatchNS:
             self._log(self._msg, self.duration(), *self._args, **self._kwargs)
 
         return False
-    
+
     def __call__(self, func) -> Callable:
         def wrapper(*args, **kwargs):
             with self:
                 func(*args, **kwargs)
+
         return wrapper
 
     def __str__(self) -> str:
