@@ -1,5 +1,6 @@
 from time import time_ns
 from copy import deepcopy
+from typing import Callable
 from logging import Logger
 from datetime import timedelta
 
@@ -23,6 +24,12 @@ class Stopwatch:
             self._log(self._msg, self.duration(), *self._args, **self._kwargs)
 
         return False
+    
+    def __call__(self, func) -> Callable:
+        def wrapper(*args, **kwargs):
+            with self:
+                func(*args, **kwargs)
+        return wrapper
 
     def __str__(self) -> str:
         return str(self.duration())
