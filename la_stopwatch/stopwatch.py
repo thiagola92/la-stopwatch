@@ -42,7 +42,7 @@ class Stopwatch:
 
         return self
 
-    def get_record(self, name: int | str) -> timedelta:
+    def get_record(self, name: int | str) -> timedelta | None:
         return self._records.get(name)
 
     def get_records(self) -> dict[timedelta]:
@@ -52,22 +52,25 @@ class Stopwatch:
         return timedelta(microseconds=(time_ns() - self._start) / 1000)
 
     def record(self, name: str = ...):
+        self._record(name)
+
+        return self
+
+    def log(self, msg: str, name: str = ..., record: bool = False, *args, **kwargs):
+        if record:
+            self._log(msg, self._record(name), *args, **kwargs)
+        else:
+            self._log(msg, self.duration(), *args, **kwargs)
+
+        return self
+
+    def _record(self, name: str = ...) -> timedelta:
         if not isinstance(name, str):
             name = len(self._records)
 
         self._records[name] = self.duration()
 
-        return self
-
-    def log(self, msg: str, name: str = ..., *args, **kwargs):
-        if not isinstance(name, str):
-            name = len(self._records)
-
-        self._records[name] = self.duration()
-
-        self._log(msg, self._records[name], *args, **kwargs)
-
-        return self
+        return self._records[name]
 
     def _log(self, msg: str, duration: timedelta, *args, **kwargs) -> None:
         msg = msg % {"duration": duration}

@@ -41,7 +41,7 @@ class StopwatchNS:
 
         return self
 
-    def get_record(self, name: int | str) -> int:
+    def get_record(self, name: int | str) -> int | None:
         return self._records.get(name)
 
     def get_records(self) -> dict[int]:
@@ -51,22 +51,25 @@ class StopwatchNS:
         return time_ns() - self._start
 
     def record(self, name: str = ...):
+        self._record(name)
+
+        return self
+
+    def log(self, msg: str, name: str = ..., record: bool = False, *args, **kwargs):
+        if record:
+            self._log(msg, self._record(name), *args, **kwargs)
+        else:
+            self._log(msg, self.duration(), *args, **kwargs)
+
+        return self
+
+    def _record(self, name: str = ...) -> int:
         if not isinstance(name, str):
             name = len(self._records)
 
         self._records[name] = self.duration()
 
-        return self
-
-    def log(self, msg: str, name: str = ..., *args, **kwargs):
-        if not isinstance(name, str):
-            name = len(self._records)
-
-        self._records[name] = self.duration()
-
-        self._log(msg, self._records[name], *args, **kwargs)
-
-        return self
+        return self._records[name]
 
     def _log(self, msg: str, duration: int, *args, **kwargs) -> None:
         msg = msg % {"duration": duration}
