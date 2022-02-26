@@ -6,42 +6,60 @@ from la_stopwatch import Stopwatch, StopwatchNS
 
 class TestRecord(TestCase):
     def test_record(self):
-        print("\nTest timedelta")
+        stopwatch = Stopwatch()
 
-        with Stopwatch() as stopwatch:
-            sleep(1)
-            stopwatch.record()
+        sleep(1)
+        stopwatch.record()
 
-            sleep(2)
-            stopwatch.record()
+        sleep(1)
+        stopwatch.record()
 
-            sleep(3)
-            stopwatch.record()
+        sleep(1)
+        stopwatch.record()
 
-            assert stopwatch.get_record(0) > timedelta(seconds=1)
-            assert stopwatch.get_record(1) > timedelta(seconds=3)
-            assert stopwatch.get_record(2) > timedelta(seconds=6)
-
-            print(stopwatch.get_records())
+        assert stopwatch.get_record(0) > timedelta(seconds=1)
+        assert stopwatch.get_record(1) > timedelta(seconds=2)
+        assert stopwatch.get_record(2) > timedelta(seconds=3)
 
     def test_record_ns(self):
-        print("\nTest nanoseconds")
+        stopwatch = StopwatchNS()
 
-        with StopwatchNS() as stopwatch:
-            sleep(1)
-            stopwatch.record()
+        sleep(1)
+        stopwatch.record()
+        
+        sleep(1)
+        stopwatch.record()
 
-            sleep(2)
-            stopwatch.record()
+        sleep(1)
+        stopwatch.record()
 
-            sleep(3)
-            stopwatch.record()
+        assert stopwatch.get_record(0) > 1_000_000_000
+        assert stopwatch.get_record(1) > 2_000_000_000
+        assert stopwatch.get_record(2) > 3_000_000_000
+    
+    def test_record_name(self):
+        stopwatch = Stopwatch()
 
-            assert stopwatch.get_record(0) > 1_000_000_000
-            assert stopwatch.get_record(1) > 3_000_000_000
-            assert stopwatch.get_record(2) > 6_000_000_000
+        sleep(1)
+        stopwatch.record("first")
 
-            print(stopwatch.get_records())
+        sleep(1)
+        stopwatch.record("second")
+
+        assert stopwatch.get_record("first") > timedelta(seconds=1)
+        assert stopwatch.get_record("second") > timedelta(seconds=2)
+    
+    def test_record_name_ns(self):
+        stopwatch = StopwatchNS()
+
+        sleep(1)
+        stopwatch.record("first")
+
+        sleep(1)
+        stopwatch.record("second")
+
+        assert stopwatch.get_record("first") > 1_000_000_000
+        assert stopwatch.get_record("second") > 2_000_000_000
 
 
 if __name__ == "__main__":

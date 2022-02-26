@@ -1,26 +1,19 @@
 from time import sleep
-from logging import getLogger, basicConfig
+from datetime import timedelta
 from unittest import TestCase, main
 from la_stopwatch import Stopwatch, StopwatchNS
 
 
 class TestContextManager(TestCase):
-    def setUp(self) -> None:
-        basicConfig(level=0)
-
-        return super().setUp()
-
     def test_context_manager(self):
-        print("\nTest timedelta")
-
-        with Stopwatch(logger=getLogger(), msg="Total operation took %(duration)s"):
+        with Stopwatch() as stopwatch:
             sleep(1)
+            assert stopwatch.duration() > timedelta(seconds=1)
 
     def test_context_manager_ns(self):
-        print("\nTest nanoseconds")
-
-        with StopwatchNS(logger=getLogger(), msg="Total operation took %(duration)s"):
+        with StopwatchNS() as stopwatch:
             sleep(1)
+            assert stopwatch.duration() > 1_000_000_000
 
 
 if __name__ == "__main__":
