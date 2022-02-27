@@ -63,7 +63,7 @@ class StopwatchNS:
 
         return self
 
-    def _record(self, name: str = ...) -> int:
+    def _record(self, name: str) -> int:
         if not isinstance(name, str):
             name = len(self._records)
 

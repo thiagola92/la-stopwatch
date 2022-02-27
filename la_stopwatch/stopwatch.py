@@ -64,7 +64,7 @@ class Stopwatch:
 
         return self
 
-    def _record(self, name: str = ...) -> timedelta:
+    def _record(self, name: str) -> timedelta:
         if not isinstance(name, str):
             name = len(self._records)
 
