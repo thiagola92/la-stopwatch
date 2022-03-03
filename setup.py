@@ -6,7 +6,7 @@ long_description = Path("README.md").read_text()
 setup(
     name="la-stopwatch",
     version="0.0.1",
-    description="Time",
+    description="Measure the amount of time that elapses between lap times",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/thiagola92/la-stopwatch",
