@@ -51,7 +51,7 @@ print(stopwatch.get_records())
 # 0:00:00.000199
 print(stopwatch.get_record(0))
 
-# Record with name "thiago"
+# Record with name "last record"
 # 0:00:00.000304
 print(stopwatch.get_record("last record"))
 ```
