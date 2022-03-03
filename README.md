@@ -9,7 +9,7 @@ There is two versions of stopwatch:
   - `StopwatchNS`
   - `Stopwatch`
 
-While both measure using nanoseconds, the second option convert nanoseconds to `timedelta` before returning any time measurement. All examples will be using `Stopwatch` but both have the same methods, you should expect only integers when dealing with `StopwatchNS`.  
+While both measure using nanoseconds, the second option convert nanoseconds to `timedelta` before returning any time measurement. All examples will be using `Stopwatch` but both have the same methods.  
 
 Time start when `Stopwatch` is created.  
 ```python
@@ -18,10 +18,11 @@ from la_stopwatch import Stopwatch
 
 stopwatch = Stopwatch()
 
-with open("filename1", "r") as f:
+with open("filename", "r") as f:
     raw = f.readlines()
 
-print(stopwatch) # 0:00:00.000292
+print(stopwatch.duration()) # 0:00:00.000292
+print(stopwatch) # same as above
 ```
 
 Record each *lap time* for future analysis.  
@@ -44,15 +45,12 @@ with open("filename3", "r") as f:
 stopwatch.record("last record")
 
 # Dictionary with all records
-# {0: datetime.timedelta(microseconds=199), 1: datetime.timedelta(microseconds=260), 'last record': datetime.timedelta(microseconds=304)}
 print(stopwatch.get_records())
 
 # First record in the dictionary
-# 0:00:00.000199
 print(stopwatch.get_record(0))
 
 # Record with name "last record"
-# 0:00:00.000304
 print(stopwatch.get_record("last record"))
 ```
 
@@ -69,25 +67,22 @@ stopwatch.record().reset()
 
 with open("filename2", "r") as f:
     raw = f.readlines()
-stopwatch.record().reset()
+stopwatch.record()
 
-# {0: datetime.timedelta(microseconds=214), 1: datetime.timedelta(microseconds=48)}
-print(stopwatch.get_records())
+print(stopwatch.get_record(0))
+print(stopwatch.get_record(1))
 ```
 
-Use `log()` method to print/log the duration and record the *lap time* at the same time.  
+Use `log()` method to print/log the duration.  
 ```python
-from logging import getLogger, basicConfig
 from la_stopwatch import Stopwatch
 
 
 stopwatch = Stopwatch()
 
-with open("filename1", "r") as f:
+with open("filename", "r") as f:
     raw = f.readlines()
-    
-# print the duration with `print()`
-# "Duration: 0:00:00.005309"
+
 stopwatch.log("Duration: %(duration)s")
 ```
 
@@ -100,11 +95,9 @@ basicConfig(level=0)
 
 stopwatch = Stopwatch(logger=getLogger())
 
-with open("filename1", "r") as f:
+with open("filename", "r") as f:
     raw = f.readlines()
 
-# log the duration with `logger.debug()`
-# "DEBUG:root:Duration: 0:00:00.005309"
 stopwatch.log("Duration: %(duration)s")
 ```
 
@@ -114,7 +107,7 @@ from la_stopwatch import Stopwatch
 
 
 with Stopwatch("Duration: %(duration)s"):
-    with open("filename1", "r") as f:
+    with open("filename", "r") as f:
         raw = f.readlines()
 ```
 
@@ -125,6 +118,6 @@ from la_stopwatch import Stopwatch
 
 @Stopwatch("Duration: %(duration)s")
 def open_file():
-    with open("filename1", "r") as f:
+    with open("filename", "r") as f:
         raw = f.readlines()
 ```
