@@ -73,27 +73,16 @@ print(stopwatch.get_record(0))
 print(stopwatch.get_record(1))
 ```
 
-Use `log()` method to print/log the duration.  
+Use `log()` method to log the duration.  
 ```python
+from logging import basicConfig
 from la_stopwatch import Stopwatch
 
 
-stopwatch = Stopwatch()
-
-with open("filename", "r") as f:
-    raw = f.readlines()
-
-stopwatch.log("Duration: %(duration)s")
-```
-
-```python
-from logging import getLogger, basicConfig
-from la_stopwatch import Stopwatch
-
-
+# To show log level DEBUG
 basicConfig(level=0)
 
-stopwatch = Stopwatch(logger=getLogger())
+stopwatch = Stopwatch()
 
 with open("filename", "r") as f:
     raw = f.readlines()

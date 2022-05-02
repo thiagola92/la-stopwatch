@@ -6,6 +6,10 @@ from la_stopwatch import Stopwatch, StopwatchNS
 
 
 class TestLog(TestCase):
+    def setUp(self) -> None:
+        basicConfig(level=0)
+        return super().setUp()
+    
     def test_log(self):
         stopwatch = Stopwatch()
 
@@ -29,32 +33,6 @@ class TestLog(TestCase):
 
         assert stopwatch.get_record(0) > 1_000_000_000
         assert stopwatch.get_record(1) > 2_000_000_000
-    
-    def test_logger(self):
-        basicConfig(level=0)
-
-        stopwatch = Stopwatch(logger=getLogger())
-
-        sleep(1)
-        stopwatch.log("First sleep took %(duration)s", record=True)
-
-        sleep(1)
-        stopwatch.log("Total sleep took %(duration)s", record=True)
-
-        assert stopwatch.get_record(0) > timedelta(seconds=1)
-    
-    def test_logger_ns(self):
-        basicConfig(level=0)
-
-        stopwatch = StopwatchNS(logger=getLogger())
-
-        sleep(1)
-        stopwatch.log("First sleep took %(duration)s", record=True)
-
-        sleep(1)
-        stopwatch.log("Total sleep took %(duration)s", record=True)
-
-        assert stopwatch.get_record(0) > 1_000_000_000
     
     def test_log_name(self):
         stopwatch = Stopwatch()

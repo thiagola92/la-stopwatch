@@ -2,11 +2,12 @@ from time import time_ns
 from copy import deepcopy
 from typing import Callable
 from logging import Logger
+from logging import getLogger
 from datetime import timedelta
 
 
 class Stopwatch:
-    def __init__(self, msg: str = ..., logger: Logger = ..., *args, **kwargs):
+    def __init__(self, msg: str = ..., logger: Logger = getLogger("la-stopwatch"), *args, **kwargs):
         self._records: dict[timedelta] = {}
 
         self._msg = msg
@@ -77,7 +78,4 @@ class Stopwatch:
         args = args or self._args
         kwargs = kwargs or self._kwargs
 
-        if isinstance(self._logger, Logger):
-            self._logger.debug(msg, *args, **kwargs)
-        else:
-            print(msg, *args, **kwargs)
+        self._logger.debug(msg, *args, **kwargs)
