@@ -1,6 +1,7 @@
 name: Publish Package
 on: [push]
 jobs:
-  runs-on: ubuntu-latest
-  steps:
-    - run: pip install --upgrade pip
+  Publish-Package:
+    runs-on: ubuntu-latest
+    steps:
+      - run: pip install --upgrade pip
