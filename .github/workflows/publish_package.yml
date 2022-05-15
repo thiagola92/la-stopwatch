@@ -1,9 +1,13 @@
 name: Publish Package
-on: [push]
+on:
+  push:
+    branches:
+      - main
 jobs:
-  Publish-Package:
+  publish-package:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - run: pip install --upgrade pip
       - run: pip install build
       - run: pip install twine
