@@ -4,7 +4,7 @@ on:
     branches:
       - main
 jobs:
-  publish-package:
+  publish-test-package:
     if: ${{ github.event.head_commit.message }} == "!Publish test"
     runs-on: ubuntu-latest
     steps:
