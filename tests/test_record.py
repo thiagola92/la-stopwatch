@@ -1,6 +1,7 @@
-from time import sleep
 from datetime import timedelta
+from time import sleep
 from unittest import TestCase, main
+
 from la_stopwatch import Stopwatch, StopwatchNS
 
 
@@ -26,7 +27,7 @@ class TestRecord(TestCase):
 
         sleep(1)
         stopwatch.record()
-        
+
         sleep(1)
         stopwatch.record()
 
@@ -36,7 +37,7 @@ class TestRecord(TestCase):
         assert stopwatch.get_record(0) > 1_000_000_000
         assert stopwatch.get_record(1) > 2_000_000_000
         assert stopwatch.get_record(2) > 3_000_000_000
-    
+
     def test_record_name(self):
         stopwatch = Stopwatch()
 
@@ -48,7 +49,7 @@ class TestRecord(TestCase):
 
         assert stopwatch.get_record("first") > timedelta(seconds=1)
         assert stopwatch.get_record("second") > timedelta(seconds=2)
-    
+
     def test_record_name_ns(self):
         stopwatch = StopwatchNS()
 

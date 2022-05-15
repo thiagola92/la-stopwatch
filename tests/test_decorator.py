@@ -1,5 +1,6 @@
 from time import sleep
 from unittest import TestCase, main
+
 from la_stopwatch import Stopwatch, StopwatchNS
 
 

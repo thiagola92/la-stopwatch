@@ -1,12 +1,17 @@
-from time import time_ns
 from copy import deepcopy
+from logging import Logger, getLogger
+from time import time_ns
 from typing import Callable
-from logging import Logger
-from logging import getLogger
 
 
 class StopwatchNS:
-    def __init__(self, msg: str = ..., logger: Logger = getLogger("la-stopwatch"), *args, **kwargs):
+    def __init__(
+        self,
+        msg: str = ...,
+        logger: Logger = getLogger("la-stopwatch"),
+        *args,
+        **kwargs
+    ):
         self._records: dict[int] = {}
 
         self._msg = msg
