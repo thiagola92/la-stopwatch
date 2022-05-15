@@ -5,3 +5,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: pip install --upgrade pip
+      - run: pip install build
+      - run: pip install twine
+      - run: python -m build --wheel
