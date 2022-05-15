@@ -5,6 +5,7 @@ on:
       - main
 jobs:
   publish-package:
+    if: ${{ github.event.head_commit.message }} == "!Publish"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
