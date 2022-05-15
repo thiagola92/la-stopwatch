@@ -1,11 +1,12 @@
 from pathlib import Path
-from setuptools import setup, find_packages
+
+from setuptools import find_packages, setup
 
 long_description = Path("README.md").read_text()
 
 setup(
     name="la-stopwatch",
-    version="0.0.2",
+    version="0.0.3",
     description="Measure the amount of time that elapses between lap times",
     long_description=long_description,
     long_description_content_type="text/markdown",
