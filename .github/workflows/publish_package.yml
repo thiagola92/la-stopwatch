@@ -12,3 +12,6 @@ jobs:
       - run: pip install build
       - run: pip install twine
       - run: python -m build --wheel
+      - run: echo "${{ github.ref }}"
+      - run: echo "${{ github.commit }}"
+      - run: echo "${{ github }}"
