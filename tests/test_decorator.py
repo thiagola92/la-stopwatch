@@ -5,11 +5,11 @@ from la_stopwatch import Stopwatch, StopwatchNS
 
 
 class TestDecorator(TestCase):
-    @Stopwatch()
+    @Stopwatch(print)
     def test_decorator(self):
         pass
 
-    @StopwatchNS()
+    @StopwatchNS(print)
     def test_decorator_ns(self):
         pass
 
