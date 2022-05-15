@@ -5,6 +5,16 @@ on:
       - main
 jobs:
   publish-package:
+    if: ${{ github.event.head_commit.message }} == "!Publish test"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: pip install --upgrade pip
+      - run: pip install build
+      - run: pip install twine
+      - run: python -m build --wheel
+      - run: twine upload --repository testpypi --username __token__ --password ${{ secrets.PYPI_TOKEN}} dist/* 
+  publish-package:
     if: ${{ github.event.head_commit.message }} == "!Publish"
     runs-on: ubuntu-latest
     steps:
@@ -13,4 +23,4 @@ jobs:
       - run: pip install build
       - run: pip install twine
       - run: python -m build --wheel
-      - run: twine upload dist/* -u __token__ -p ${{ secrets.PYPI_TOKEN}}
+      - run: twine upload --username __token__ --password ${{ secrets.PYPI_TOKEN}} dist/* 
