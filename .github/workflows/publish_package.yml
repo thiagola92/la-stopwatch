@@ -5,7 +5,7 @@ on:
       - main
 jobs:
   publish-test-package:
-    if: "${{ github.event.head_commit.message }}" == "!Publish test"
+    if: "'${{ github.event.head_commit.message }}' == '!Publish test'"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -15,7 +15,7 @@ jobs:
       - run: python -m build --wheel
       - run: twine upload --repository testpypi --username __token__ --password ${{ secrets.PYPI_TOKEN }} dist/* 
   publish-package:
-    if: "${{ github.event.head_commit.message }}" == "!Publish"
+    if: "'${{ github.event.head_commit.message }}' == '!Publish'"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
