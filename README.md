@@ -4,8 +4,8 @@ Measure the amount of time that elapses between *lap times*.
 # install
 `pip install la-stopwatch`  
 
-# usage synchronous
-There is two versions of synchronous stopwatch:  
+# usage
+There is two versions of stopwatch:  
   - `StopwatchNS`
   - `Stopwatch`
 
@@ -118,8 +118,26 @@ print(stopwatch.get_record(0))  # 0:00:01.001267
 print(stopwatch.get_record(1))  # 0:00:01.000460
 ```
 
+## decorator 
+`Stopwatch` accepts a callback as argument which will be called on exit of decorators and context managers. The callback receive the duration as first argument and extra arguments or keywords arguments will be passed to the callback after the duration.  
+
+```python
+from time import sleep
+
+from la_stopwatch import Stopwatch
+
+
+@Stopwatch(print, "- Success!")
+def main():
+    sleep(1)
+
+
+# 0:00:01.001281 - Success!
+main()
+```
+
 ## context manager
-Pass a callback function to `Stopwatch` and it'll be called when exit the context manager passing the duration.  
+Works the same way as decorators.  
 
 ```python
 from time import sleep
@@ -131,105 +149,93 @@ with Stopwatch(print):
     sleep(1)
 ```
 
-Any extra argument or keyword argument will be passed to the callback after the duration.  
+But you can interact with `Stopwatch` inside the context manager.  
 
 ```python
 from time import sleep
 
 from la_stopwatch import Stopwatch
 
-
-def on_finish(duration, msg):
-    print(duration, msg)
-
-
-# 0:00:01.001766 - Success!
-with Stopwatch(on_finish, "- Success!"):
+# 0:00:00.000082
+with Stopwatch(print) as stopwatch:
     sleep(1)
+    stopwatch.reset()
 ```
 
-## decorator 
-Same as context manager but now as decorator 😂.  
+## async
+While `Stopwatch` alone doesn't have reason to use asynchronous code, it can fit your asynchronous code easly. You may need this when:  
+- Decorating an `async` function
+- Callback is an `async` function
 
-```python
-from time import sleep
+## async - context manager
+Whenever you are inside an asynchronous function use `async with`.
 
-from la_stopwatch import Stopwatch
-
-
-@Stopwatch(print)
-def main():
-    sleep(1)
-
-
-# 0:00:01.001745
-main()
-```
-
-# usage asynchronous
-There is two versions of asynchronous stopwatch:  
-  - `AsyncStopwatchNS`
-  - `AsyncStopwatch`
-
-There is two occasions that you need them:  
-  - Your callback is asynchronous
-  - Decorated function is asynchronous
-
-## context manager
 ```python
 import asyncio
 
-from la_stopwatch import AsyncStopwatch
+from la_stopwatch import Stopwatch
 
 
-async def on_finish(duration):
+async def on_finish_1(duration):
+    print(duration)
+
+
+def on_finish_2(duration):
     print(duration)
 
 
 async def main():
-    async with AsyncStopwatch(on_finish, is_async=True):
+    async with Stopwatch(on_finish_1):
+        await asyncio.sleep(1)
+    
+    async with Stopwatch(on_finish_2):
         await asyncio.sleep(1)
 
 
-# 0:00:01.001583
+# 0:00:01.001196
+# 0:00:01.001875
 asyncio.run(main())
 ```
 
-## decorator
-If your decorated function is asynchronous, you need to decorate with the asynchronous classes.
+It will check whenever you callback is asynchronous or not before calling, so you can change the callback as you feel like.  
+
+## async - decorator
+Same as context managers, it will check whenver your callback is asynchronous or not before calling.  
 
 ```python
 import asyncio
 
-from la_stopwatch import AsyncStopwatch
-
-
-@AsyncStopwatch(print)
-async def main():
-    await asyncio.sleep(1)
-
-# 0:00:01.002297
-asyncio.run(main())
-```
-
-Notice that the callback doesn't need to be asynchronous.  
-In case it is, pass `is_async` as `True`.  
-
-```python
-import asyncio
-
-from la_stopwatch import AsyncStopwatch
+from la_stopwatch import Stopwatch
 
 
 async def on_finish(duration):
     print(duration)
 
 
-@AsyncStopwatch(on_finish, is_async=True)
+@Stopwatch(on_finish)
 async def main():
     await asyncio.sleep(1)
 
 
-# 0:00:01.001583
+# 0:00:01.002338
+asyncio.run(main())
+```
+
+```python
+import asyncio
+
+from la_stopwatch import Stopwatch
+
+
+def on_finish(duration):
+    print(duration)
+
+
+@Stopwatch(on_finish)
+async def main():
+    await asyncio.sleep(1)
+
+
+# 0:00:01.002063
 asyncio.run(main())
 ```

@@ -1,16 +1,16 @@
 import asyncio
 
-from la_stopwatch import AsyncStopwatch
+from la_stopwatch import Stopwatch
 
 
-async def on_finish(duration):
+def on_finish(duration):
     print(duration)
 
 
+@Stopwatch(on_finish)
 async def main():
-    async with AsyncStopwatch(on_finish, is_async=True):
-        await asyncio.sleep(1)
+    await asyncio.sleep(1)
 
 
-# 0:00:01.001583
+# 0:00:01.002338
 asyncio.run(main())

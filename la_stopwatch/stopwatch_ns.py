@@ -1,12 +1,15 @@
+from asyncio import iscoroutinefunction
 from copy import deepcopy
 from time import time_ns
-from typing import Callable
+from typing import Awaitable, Callable
 
 from la_stopwatch.abstraction import StopwatchABS
 
 
 class StopwatchNS(StopwatchABS):
-    def __init__(self, callback: Callable[[int], None] = ..., *args, **kwargs):
+    def __init__(
+        self, callback: Callable[[int], None | Awaitable] = ..., *args, **kwargs
+    ):
         self._records: dict[int | str, int] = {}
         self._nameless_records: int = 0
 
@@ -20,7 +23,7 @@ class StopwatchNS(StopwatchABS):
         return self.reset()
 
     def __exit__(self, type, value, traceback) -> bool:
-        if isinstance(self._callback, Callable):
+        if callable(self._callback):
             self._callback(self.duration(), *self._args, **self._kwargs)
 
         return False
@@ -30,7 +33,24 @@ class StopwatchNS(StopwatchABS):
             with self:
                 return func(*args, **kwargs)
 
+        async def awrapper(*args, **kwargs):
+            async with self:
+                return await func(*args, **kwargs)
+
+        if iscoroutinefunction(func):
+            return awrapper
         return wrapper
+
+    async def __aenter__(self):
+        return self.reset()
+
+    async def __aexit__(self, type, value, traceback) -> bool:
+        if callable(self._callback) and iscoroutinefunction(self._callback):
+            await self._callback(self.duration(), *self._args, **self._kwargs)
+        elif callable(self._callback):
+            self._callback(self.duration(), *self._args, **self._kwargs)
+
+        return False
 
     def __str__(self) -> str:
         return str(self.duration())

@@ -12,11 +12,19 @@ class StopwatchABS:
 
     @abstractmethod
     def __exit__(self, type, value, traceback) -> bool:
-        """Log before exit context manager."""
+        """Call callback before exit context manager."""
 
     @abstractmethod
     def __call__(self, func: Callable) -> Callable:
         """Time a function or method."""
+
+    @abstractmethod
+    async def __aenter__(self):
+        """Reset timer before enter async context manager."""
+
+    @abstractmethod
+    async def __aexit__(self, type, value, traceback) -> bool:
+        """Await callback before exit context manager."""
 
     @abstractmethod
     def __str__(self) -> str:
