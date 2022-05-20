@@ -28,7 +28,7 @@ class StopwatchNS(StopwatchABS):
     def __call__(self, func: Callable) -> Callable:
         def wrapper(*args, **kwargs):
             with self:
-                func(*args, **kwargs)
+                return func(*args, **kwargs)
 
         return wrapper
 
