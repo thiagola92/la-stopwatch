@@ -12,11 +12,31 @@ class StopwatchABS:
 
     @abstractmethod
     def __exit__(self, type, value, traceback) -> bool:
-        """Call callback before exit context manager."""
+        """Call callback before exit context manager.
+        
+        The callback will receive:
+            - Extra arguments from initialization
+            - Context manager duration
+            - Extra keyword arguments from initialization
+        """
 
     @abstractmethod
     def __call__(self, func: Callable) -> Callable:
-        """Time a function or method."""
+        """Time a function or method.
+        
+        The callback will receive:
+            - Arguments from function
+            - Extra arguments from initialization
+            - Decorated function duration
+            - Keyword arguments from function
+            - Extra keyword arguments from initialization
+        
+        Note: Extra keyword arguments from initialization can
+        overwrite the function keyword arguments.
+
+        Note 2: The intention is to be easy to use with print() function,
+        that's why duration is giving as argument and not keyword argument.
+        """
 
     @abstractmethod
     async def __aenter__(self):
@@ -24,7 +44,13 @@ class StopwatchABS:
 
     @abstractmethod
     async def __aexit__(self, type, value, traceback) -> bool:
-        """Await callback before exit context manager."""
+        """Await callback before exit context manager.
+        
+        The callback will receive:
+            - Extra arguments from initialization
+            - Context manager duration
+            - Extra keyword arguments from initialization
+        """
 
     @abstractmethod
     def __str__(self) -> str:

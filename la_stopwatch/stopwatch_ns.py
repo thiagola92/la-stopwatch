@@ -24,16 +24,22 @@ class StopwatchNS(StopwatchABS):
 
     def __exit__(self, type, value, traceback) -> bool:
         if callable(self._callback):
-            self._callback(self.duration(), *self._args, **self._kwargs)
+            self._callback(*self._args, self.duration(), **self._kwargs)
 
         return False
 
     def __call__(self, func: Callable) -> Callable:
         def wrapper(*args, **kwargs):
+            self._args = args + self._args
+            self._kwargs = kwargs | self._kwargs
+            
             with self:
                 return func(*args, **kwargs)
 
         async def awrapper(*args, **kwargs):
+            self._args = args + self._args
+            self._kwargs = kwargs | self._kwargs
+
             async with self:
                 return await func(*args, **kwargs)
 
@@ -46,9 +52,9 @@ class StopwatchNS(StopwatchABS):
 
     async def __aexit__(self, type, value, traceback) -> bool:
         if callable(self._callback) and iscoroutinefunction(self._callback):
-            await self._callback(self.duration(), *self._args, **self._kwargs)
+            await self._callback(*self._args, self.duration(), **self._kwargs)
         elif callable(self._callback):
-            self._callback(self.duration(), *self._args, **self._kwargs)
+            self._callback(*self._args, self.duration(), **self._kwargs)
 
         return False
 

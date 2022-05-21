@@ -19,6 +19,18 @@ class TestContextManager(IsolatedAsyncioTestCase):
     async def D(duration):
         assert duration > 1_000_000_000
 
+    def E(arg1, arg2, arg3, duration, kwarg):
+        assert arg1 == 1
+        assert arg2 == 2
+        assert arg3 == 3
+        assert kwarg == 4
+
+    async def F(arg1, arg2, arg3, duration, kwarg):
+        assert arg1 == 1
+        assert arg2 == 2
+        assert arg3 == 3
+        assert kwarg == 4
+
     # Test using stopwatch inside with
 
     def test_context_manager(self):
@@ -66,6 +78,24 @@ class TestContextManager(IsolatedAsyncioTestCase):
     async def test_context_manager_cb_ns_3(self):
         async with StopwatchNS(TestContextManager.D):
             await asyncio.sleep(1)
+    
+    # Test passing arguments
+
+    def test_arguments(self):
+        with Stopwatch(TestContextManager.E, 1, 2, 3, kwarg=4):
+            pass
+
+    def test_arguments_ns(self):
+        with StopwatchNS(TestContextManager.E, 1, 2, 3, kwarg=4):
+            pass
+
+    async def test_arguments_2(self):
+        async with Stopwatch(TestContextManager.F, 1, 2, 3, kwarg=4):
+            pass
+
+    async def test_arguments_ns_2(self):
+        async with StopwatchNS(TestContextManager.F, 1, 2, 3, kwarg=4):
+            pass
 
 
 if __name__ == "__main__":

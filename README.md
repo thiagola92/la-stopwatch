@@ -24,6 +24,7 @@ stopwatch = Stopwatch()
 sleep(1)
 print(stopwatch.duration())  # 0:00:01.001374
 ```
+
 Retrive the current time with `duration()`.  
 
 ## record
@@ -118,26 +119,8 @@ print(stopwatch.get_record(0))  # 0:00:01.001267
 print(stopwatch.get_record(1))  # 0:00:01.000460
 ```
 
-## decorator 
-`Stopwatch` accepts a callback as argument which will be called on exit of decorators and context managers. The callback receive the duration as first argument and extra arguments or keywords arguments will be passed to the callback after the duration.  
-
-```python
-from time import sleep
-
-from la_stopwatch import Stopwatch
-
-
-@Stopwatch(print, "- Success!")
-def main():
-    sleep(1)
-
-
-# 0:00:01.001281 - Success!
-main()
-```
-
 ## context manager
-Works the same way as decorators.  
+`Stopwatch` accepts a callback as argument which will be called on exit of context managers receving the duration.  
 
 ```python
 from time import sleep
@@ -149,7 +132,7 @@ with Stopwatch(print):
     sleep(1)
 ```
 
-But you can interact with `Stopwatch` inside the context manager.  
+The advantage of context manager is that you can interact with `Stopwatch` during the scope.  
 
 ```python
 from time import sleep
@@ -160,6 +143,130 @@ from la_stopwatch import Stopwatch
 with Stopwatch(print) as stopwatch:
     sleep(1)
     stopwatch.reset()
+```
+
+The callback receive any extra arguments during initialization and the duration. In other words, callback receives:  
+- Extra initialization arguments
+- Duration
+- Extra initialization keyword arguments
+
+```python
+from time import sleep
+
+from la_stopwatch import Stopwatch
+
+
+def on_finish(msg, duration):
+    print(msg, duration)
+
+# Success 0:00:01.001218
+with Stopwatch(on_finish, "Success"):
+    sleep(1)
+```
+
+This order helps classes methods to follow the right order (`self` keyword first).  
+
+```python
+from time import sleep
+
+from la_stopwatch import Stopwatch
+
+
+class Test():
+    def on_finish(self, msg, duration, grade):
+        print(msg, grade, duration)
+    
+    def start(self):
+        with Stopwatch(self.on_finish, "Success", grade="A+"):
+            sleep(1)
+
+# Success A+ 0:00:01.001470
+Test().start()
+```
+
+## decorator 
+`Stopwatch` accepts a callback as argument which will be called on exit of decoratored functions receving the duration.  
+
+```python
+from time import sleep
+
+from la_stopwatch import Stopwatch
+
+
+@Stopwatch(print)
+def main():
+    sleep(1)
+
+
+# 0:00:01.001281
+main()
+```
+
+Under the hood decorators use context managers, so the basic about callbacks are the same.  
+
+```python
+from time import sleep
+
+from la_stopwatch import Stopwatch
+
+
+def on_finish(msg, duration, grade):
+    print(msg, duration, grade)
+
+
+@Stopwatch(on_finish, "Success", grade="A+")
+def main():
+    sleep(1)
+
+
+# Success 0:00:01.001084 A+
+main()
+```
+
+But yours functions and methods can receive arguments that you may find yourself wanting inside the callback. That's why the callback will include these arguments following this order:  
+- Function arguments
+- Extra initialization arguments
+- Duration
+- Function keyword arguments
+- Extra initialization keyword arguments  
+
+```python
+from time import sleep
+
+from la_stopwatch import Stopwatch
+
+
+def on_finish(student, msg, duration, grade):
+    print(student, msg, duration, grade)
+
+
+@Stopwatch(on_finish, "Success", grade="A+")
+def main(student):
+    sleep(1)
+
+
+# thiagola92 Success 0:00:01.000698 A+
+main("thiagola92")
+```
+
+You can't use `self` on decorators from classes, but it will be passed to the callback as is one of the functions arguments.  
+
+```python
+from time import sleep
+
+from la_stopwatch import Stopwatch
+
+
+class Test():
+    def on_finish(self, student, msg, duration, grade):
+        print(student, msg, duration, grade)
+    
+    @Stopwatch(on_finish, "Success", grade="A+")
+    def start(self, student):
+        sleep(1)
+
+# thiagola92 Success 0:00:01.000500 A+
+Test().start("thiagola92")
 ```
 
 ## async
@@ -197,7 +304,7 @@ async def main():
 asyncio.run(main())
 ```
 
-It will check whenever you callback is asynchronous or not before calling, so you can change the callback as you feel like.  
+It will check whenever you callback is asynchronous or not before calling, so you can change the callback as you feel like without breaking your code.  
 
 ## async - decorator
 Same as context managers, it will check whenver your callback is asynchronous or not before calling.  
