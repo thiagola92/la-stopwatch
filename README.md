@@ -164,7 +164,7 @@ with Stopwatch(on_finish, "Success"):
     sleep(1)
 ```
 
-This order helps classes methods to follow the right order (`self` keyword first).  
+This order helps maintain `self` keyword first in classes methods.  
 
 ```python
 from time import sleep
@@ -185,7 +185,7 @@ Test().start()
 ```
 
 ## decorator 
-`Stopwatch` accepts a callback as argument which will be called on exit of decoratored functions receving the duration.  
+`Stopwatch` accepts a callback as argument which will be called on exiting decoratored functions.  
 
 ```python
 from time import sleep
@@ -202,7 +202,7 @@ def main():
 main()
 ```
 
-Under the hood decorators use context managers, so the basic about callbacks are the same.  
+Under the hood decorators use context managers, so the basics about both are equal.  
 
 ```python
 from time import sleep
@@ -223,7 +223,7 @@ def main():
 main()
 ```
 
-But yours functions and methods can receive arguments that you may find yourself wanting inside the callback. That's why the callback will include these arguments following this order:  
+But yours functions and methods can receive arguments that you may find yourself wanting to use inside the callback. That's why the callback will include these arguments. Here is the order:  
 - Function arguments
 - Extra initialization arguments
 - Duration
@@ -249,7 +249,7 @@ def main(student):
 main("thiagola92")
 ```
 
-You can't use `self` on decorators from classes, but it will be passed to the callback as is one of the functions arguments.  
+You can't use `self` when decoratoring a method, but it's not a problema because following the logic you will receive all arguments from your method.  
 
 ```python
 from time import sleep
@@ -272,7 +272,7 @@ Test().start("thiagola92")
 ## async
 While `Stopwatch` alone doesn't have reason to use asynchronous code, it can fit your asynchronous code easly. You may need this when:  
 - Decorating an `async` function
-- Callback is an `async` function
+- The Callback is an `async` function
 
 ## async - context manager
 Whenever you are inside an asynchronous function use `async with`.
@@ -307,7 +307,7 @@ asyncio.run(main())
 It will check whenever you callback is asynchronous or not before calling, so you can change the callback as you feel like without breaking your code.  
 
 ## async - decorator
-Same as context managers, it will check whenver your callback is asynchronous or not before calling.  
+Same as context managers, it will check whenever your callback is asynchronous or not before calling.  
 
 ```python
 import asyncio
