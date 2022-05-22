@@ -27,15 +27,17 @@ class StopwatchABS:
         The callback will receive:
             - Arguments from function
             - Extra arguments from initialization
-            - Decorated function duration
             - Keyword arguments from function
             - Extra keyword arguments from initialization
-        
-        Note: Extra keyword arguments from initialization can
-        overwrite the function keyword arguments.
+            - Decorated function duration
+                - Keyword argument if exist any keyword argument
+                - Argument if there is none keyword argument
 
-        Note 2: The intention is to be easy to use with print() function,
-        that's why duration is giving as argument and not keyword argument.
+        Note 1: The intention is to be easy to use with print() function,
+        that's why duration is giving as argument when no keyword argument exists.
+        
+        Note 2: Extra keyword arguments from initialization can
+        overwrite the function keyword arguments.
         """
 
     @abstractmethod
@@ -48,8 +50,13 @@ class StopwatchABS:
         
         The callback will receive:
             - Extra arguments from initialization
-            - Context manager duration
             - Extra keyword arguments from initialization
+            - Context manager duration
+                - As keyword argument if exist any keyword argument
+                - As argument if there is no keyword argument
+
+        Note 1: The intention is to be easy to use with print() function,
+        that's why duration is giving as argument when no keyword argument exists.
         """
 
     @abstractmethod

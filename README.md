@@ -21,7 +21,7 @@ from la_stopwatch import Stopwatch
 
 stopwatch = Stopwatch()
 
-sleep(1)
+time.sleep(1)
 print(stopwatch.duration())  # 0:00:01.001374
 ```
 
@@ -31,16 +31,12 @@ Retrive the current time with `duration()`.
 You can record each *lap time* for future analysis using `record()`.  
 
 ```python
-from time import sleep
-
-from la_stopwatch import Stopwatch
-
 stopwatch = Stopwatch()
 
-sleep(1)
+time.sleep(1)
 stopwatch.record()
 
-sleep(1)
+time.sleep(1)
 stopwatch.record()
 
 print(stopwatch.get_record(0))  # 0:00:01.001317
@@ -52,19 +48,15 @@ Use `get_record(n)` to get the nº record.
 Is possible to give a name for each record.  
 
 ```python
-from time import sleep
-
-from la_stopwatch import Stopwatch
-
 stopwatch = Stopwatch()
 
-sleep(1)
+time.sleep(1)
 stopwatch.record("leo")
 
-sleep(1)
+time.sleep(1)
 stopwatch.record("thiago")
 
-sleep(1)
+time.sleep(1)
 stopwatch.record("matheus")
 
 print(stopwatch.get_record("leo"))  # 0:00:01.001374
@@ -76,19 +68,15 @@ print(stopwatch.get_record("matheus"))  # 0:00:03.003551
 All records (nameless or not) are available with `get_records()`.  
 
 ```python
-from time import sleep
-
-from la_stopwatch import Stopwatch
-
 stopwatch = Stopwatch()
 
-sleep(1)
+time.sleep(1)
 stopwatch.record()
 
-sleep(1)
+time.sleep(1)
 stopwatch.record("hello")
 
-sleep(1)
+time.sleep(1)
 stopwatch.record()
 
 # {
@@ -103,16 +91,12 @@ print(stopwatch.get_records())
 Some methods return the `Stopwatch` so you can chain method calls. For example, you can record how much time take to do each action if you reset every time after recording.  
 
 ```python
-from time import sleep
-
-from la_stopwatch import Stopwatch
-
 stopwatch = Stopwatch()
 
-sleep(1)
+time.sleep(1)
 stopwatch.record().reset()
 
-sleep(1)
+time.sleep(1)
 stopwatch.record()
 
 print(stopwatch.get_record(0))  # 0:00:01.001267
@@ -123,62 +107,46 @@ print(stopwatch.get_record(1))  # 0:00:01.000460
 `Stopwatch` accepts a callback as argument which will be called on exit of context managers receving the duration.  
 
 ```python
-from time import sleep
-
-from la_stopwatch import Stopwatch
-
 # 0:00:01.001578
 with Stopwatch(print):
-    sleep(1)
+    time.sleep(1)
 ```
 
 The advantage of context manager is that you can interact with `Stopwatch` during the scope.  
 
 ```python
-from time import sleep
-
-from la_stopwatch import Stopwatch
-
 # 0:00:00.000082
 with Stopwatch(print) as stopwatch:
-    sleep(1)
+    time.sleep(1)
     stopwatch.reset()
 ```
 
 The callback receive any extra arguments during initialization and the duration. In other words, callback receives:  
 - Extra initialization arguments
-- Duration
 - Extra initialization keyword arguments
+- Duration
+    - Inside `kwargs` with the name `duration`
+    - Or as last argument in case `kwargs` is empty
 
 ```python
-from time import sleep
-
-from la_stopwatch import Stopwatch
-
-
 def on_finish(msg, duration):
     print(msg, duration)
 
 # Success 0:00:01.001218
 with Stopwatch(on_finish, "Success"):
-    sleep(1)
+    time.sleep(1)
 ```
 
 This order helps maintain `self` keyword first in classes methods.  
 
 ```python
-from time import sleep
-
-from la_stopwatch import Stopwatch
-
-
 class Test():
-    def on_finish(self, msg, duration, grade):
+    def on_finish(self, msg, grade, duration):
         print(msg, grade, duration)
     
     def start(self):
         with Stopwatch(self.on_finish, "Success", grade="A+"):
-            sleep(1)
+            time.sleep(1)
 
 # Success A+ 0:00:01.001470
 Test().start()
@@ -188,14 +156,9 @@ Test().start()
 `Stopwatch` accepts a callback as argument which will be called on exiting decoratored functions.  
 
 ```python
-from time import sleep
-
-from la_stopwatch import Stopwatch
-
-
 @Stopwatch(print)
 def main():
-    sleep(1)
+    time.sleep(1)
 
 
 # 0:00:01.001281
@@ -205,18 +168,13 @@ main()
 Under the hood decorators use context managers, so the basics about both are equal.  
 
 ```python
-from time import sleep
-
-from la_stopwatch import Stopwatch
-
-
 def on_finish(msg, duration, grade):
     print(msg, duration, grade)
 
 
 @Stopwatch(on_finish, "Success", grade="A+")
 def main():
-    sleep(1)
+    time.sleep(1)
 
 
 # Success 0:00:01.001084 A+
@@ -226,23 +184,20 @@ main()
 But yours functions and methods can receive arguments that you may find yourself wanting to use inside the callback. That's why the callback will include these arguments. Here is the order:  
 - Function arguments
 - Extra initialization arguments
-- Duration
 - Function keyword arguments
-- Extra initialization keyword arguments  
+- Extra initialization keyword arguments
+- Duration
+    - Inside `kwargs` with the name `duration`
+    - Or as last argument in case `kwargs` is empty
 
 ```python
-from time import sleep
-
-from la_stopwatch import Stopwatch
-
-
 def on_finish(student, msg, duration, grade):
     print(student, msg, duration, grade)
 
 
 @Stopwatch(on_finish, "Success", grade="A+")
 def main(student):
-    sleep(1)
+    time.sleep(1)
 
 
 # thiagola92 Success 0:00:01.000698 A+
@@ -252,18 +207,13 @@ main("thiagola92")
 You can't use `self` when decoratoring a method, but it's not a problema because following the logic you will receive all arguments from your method.  
 
 ```python
-from time import sleep
-
-from la_stopwatch import Stopwatch
-
-
 class Test():
     def on_finish(self, student, msg, duration, grade):
         print(student, msg, duration, grade)
     
     @Stopwatch(on_finish, "Success", grade="A+")
     def start(self, student):
-        sleep(1)
+        time.sleep(1)
 
 # thiagola92 Success 0:00:01.000500 A+
 Test().start("thiagola92")
@@ -310,11 +260,6 @@ It will check whenever you callback is asynchronous or not before calling, so yo
 Same as context managers, it will check whenever your callback is asynchronous or not before calling.  
 
 ```python
-import asyncio
-
-from la_stopwatch import Stopwatch
-
-
 async def on_finish(duration):
     print(duration)
 

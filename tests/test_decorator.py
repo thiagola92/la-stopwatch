@@ -47,6 +47,16 @@ class TestDecorator(IsolatedAsyncioTestCase):
         assert arg3 == 3
         assert kwarg == 4
 
+    def K(self, arg1, arg2, arg3, duration):
+        assert arg1 == 1
+        assert arg2 == 2
+        assert arg3 == 3
+
+    async def L(self, arg1, arg2, arg3, duration):
+        assert arg1 == 1
+        assert arg2 == 2
+        assert arg3 == 3
+
     # Testing if callback is called after 1 second.
 
     @Stopwatch(A)
@@ -109,6 +119,22 @@ class TestDecorator(IsolatedAsyncioTestCase):
 
     @StopwatchNS(J, 1, 2, 3, kwarg=4)
     async def test_arguments_ns_2(self):
+        pass
+
+    @Stopwatch(K, arg1=1, arg2=2, arg3=3)
+    def test_arguments_3(self):
+        pass
+
+    @StopwatchNS(K, arg1=1, arg2=2, arg3=3)
+    def test_arguments_ns_3(self):
+        pass
+
+    @Stopwatch(L, arg1=1, arg2=2, arg3=3)
+    async def test_arguments_4(self):
+        pass
+
+    @StopwatchNS(L, arg1=1, arg2=2, arg3=3)
+    async def test_arguments_ns_4(self):
         pass
 
 

@@ -23,8 +23,13 @@ class StopwatchNS(StopwatchABS):
         return self.reset()
 
     def __exit__(self, type, value, traceback) -> bool:
+        if self._kwargs:
+            self._kwargs |= {"duration": self.duration()}
+        else:
+            self._args = self._args + (self.duration(), )
+        
         if callable(self._callback):
-            self._callback(*self._args, self.duration(), **self._kwargs)
+            self._callback(*self._args, **self._kwargs)
 
         return False
 
@@ -51,10 +56,15 @@ class StopwatchNS(StopwatchABS):
         return self.reset()
 
     async def __aexit__(self, type, value, traceback) -> bool:
+        if self._kwargs:
+            self._kwargs |= {"duration": self.duration()}
+        else:
+            self._args = self._args + (self.duration(), )
+
         if callable(self._callback) and iscoroutinefunction(self._callback):
-            await self._callback(*self._args, self.duration(), **self._kwargs)
+            await self._callback(*self._args, **self._kwargs)
         elif callable(self._callback):
-            self._callback(*self._args, self.duration(), **self._kwargs)
+            self._callback(*self._args, **self._kwargs)
 
         return False
 
