@@ -1,5 +1,5 @@
 # la-stopwatch
-Measure the amount of time that elapses between *lap times*.   
+Measure the amount of time that elapses between *lap times*.  
 
 # install
 `pip install la-stopwatch`  
