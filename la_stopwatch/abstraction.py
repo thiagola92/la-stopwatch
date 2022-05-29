@@ -3,7 +3,7 @@ from typing import Callable
 
 
 class StopwatchABS:
-    def __init__(self, callback: Callable[[int], None] = ..., *args, **kwargs):
+    def __init__(self, callback: Callable = ..., *args, **kwargs):
         """"""
 
     @abstractmethod
@@ -13,7 +13,7 @@ class StopwatchABS:
     @abstractmethod
     def __exit__(self, type, value, traceback) -> bool:
         """Call callback before exit context manager.
-        
+
         The callback will receive:
             - Extra arguments from initialization
             - Context manager duration
@@ -23,7 +23,7 @@ class StopwatchABS:
     @abstractmethod
     def __call__(self, func: Callable) -> Callable:
         """Time a function or method.
-        
+
         The callback will receive:
             - Arguments from function
             - Extra arguments from initialization
@@ -35,7 +35,7 @@ class StopwatchABS:
 
         Note 1: The intention is to be easy to use with print() function,
         that's why duration is giving as argument when no keyword argument exists.
-        
+
         Note 2: Extra keyword arguments from initialization can
         overwrite the function keyword arguments.
         """
@@ -47,7 +47,7 @@ class StopwatchABS:
     @abstractmethod
     async def __aexit__(self, type, value, traceback) -> bool:
         """Await callback before exit context manager.
-        
+
         The callback will receive:
             - Extra arguments from initialization
             - Extra keyword arguments from initialization

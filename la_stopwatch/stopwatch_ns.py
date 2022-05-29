@@ -1,15 +1,13 @@
 from asyncio import iscoroutinefunction
 from copy import deepcopy
 from time import time_ns
-from typing import Awaitable, Callable
+from typing import Any, Awaitable, Callable
 
 from la_stopwatch.abstraction import StopwatchABS
 
 
 class StopwatchNS(StopwatchABS):
-    def __init__(
-        self, callback: Callable[[int], None | Awaitable] = ..., *args, **kwargs
-    ):
+    def __init__(self, callback: Callable = ..., *args, **kwargs):
         self._records: dict[int | str, int] = {}
         self._nameless_records: int = 0
 
@@ -26,8 +24,8 @@ class StopwatchNS(StopwatchABS):
         if self._kwargs:
             self._kwargs |= {"duration": self.duration()}
         else:
-            self._args = self._args + (self.duration(), )
-        
+            self._args = self._args + (self.duration(),)
+
         if callable(self._callback):
             self._callback(*self._args, **self._kwargs)
 
@@ -37,7 +35,7 @@ class StopwatchNS(StopwatchABS):
         def wrapper(*args, **kwargs):
             self._args = args + self._args
             self._kwargs = kwargs | self._kwargs
-            
+
             with self:
                 return func(*args, **kwargs)
 
@@ -59,7 +57,7 @@ class StopwatchNS(StopwatchABS):
         if self._kwargs:
             self._kwargs |= {"duration": self.duration()}
         else:
-            self._args = self._args + (self.duration(), )
+            self._args = self._args + (self.duration(),)
 
         if callable(self._callback) and iscoroutinefunction(self._callback):
             await self._callback(*self._args, **self._kwargs)
