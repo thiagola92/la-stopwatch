@@ -33,17 +33,17 @@ class StopwatchNS(StopwatchABS):
 
     def __call__(self, func: Callable) -> Callable:
         def wrapper(*args, **kwargs):
-            self._args = args + self._args
-            self._kwargs = kwargs | self._kwargs
+            a = args + self._args
+            k = kwargs | self._kwargs
 
-            with self:
+            with self.__class__(self._callback, *a, **k):
                 return func(*args, **kwargs)
 
         async def awrapper(*args, **kwargs):
-            self._args = args + self._args
-            self._kwargs = kwargs | self._kwargs
+            a = args + self._args
+            k = kwargs | self._kwargs
 
-            async with self:
+            async with self.__class__(self._callback, *a, **k):
                 return await func(*args, **kwargs)
 
         if iscoroutinefunction(func):

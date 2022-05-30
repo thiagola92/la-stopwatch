@@ -78,7 +78,7 @@ class TestContextManager(IsolatedAsyncioTestCase):
     async def test_context_manager_cb_ns_3(self):
         async with StopwatchNS(TestContextManager.D):
             await asyncio.sleep(1)
-    
+
     # Test passing arguments
 
     def test_arguments(self):

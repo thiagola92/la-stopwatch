@@ -57,6 +57,22 @@ class TestDecorator(IsolatedAsyncioTestCase):
         assert arg2 == 2
         assert arg3 == 3
 
+    @Stopwatch(lambda _, d: None)
+    def M(self):
+        return True
+
+    @StopwatchNS(lambda _, d: None)
+    def N(self):
+        return True
+
+    @Stopwatch(lambda _, d: None)
+    async def O(self):
+        return True
+
+    @StopwatchNS(lambda _, d: None)
+    async def P(self):
+        return True
+
     # Testing if callback is called after 1 second.
 
     @Stopwatch(A)
@@ -102,7 +118,7 @@ class TestDecorator(IsolatedAsyncioTestCase):
 
     async def test_decorator_ns_return(self):
         assert await self.H()
-    
+
     # Test passing arguments
 
     @Stopwatch(I, 1, 2, 3, kwarg=4)
@@ -136,6 +152,20 @@ class TestDecorator(IsolatedAsyncioTestCase):
     @StopwatchNS(L, arg1=1, arg2=2, arg3=3)
     async def test_arguments_ns_4(self):
         pass
+
+    # Test calling two times
+
+    def test_calling_two_times(self):
+        assert self.M()
+
+    def test_calling_two_times_ns(self):
+        assert self.N()
+
+    async def test_calling_two_times_2(self):
+        assert await self.O()
+
+    async def test_calling_two_times_ns_2(self):
+        assert await self.P()
 
 
 if __name__ == "__main__":
