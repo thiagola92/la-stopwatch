@@ -1,9 +1,10 @@
 from asyncio import iscoroutinefunction
 from copy import deepcopy
 from time import time_ns
-from typing import Any, Awaitable, Callable
+from typing import Callable
 
 from la_stopwatch.abstraction import StopwatchABS
+from la_stopwatch.utility import get_arguments
 
 
 class StopwatchNS(StopwatchABS):
@@ -33,6 +34,8 @@ class StopwatchNS(StopwatchABS):
 
     def __call__(self, func: Callable) -> Callable:
         def wrapper(*args, **kwargs):
+            args, kwargs = get_arguments(func=func, args=args, kwargs=kwargs)
+
             a = args + self._args
             k = kwargs | self._kwargs
 
@@ -40,6 +43,8 @@ class StopwatchNS(StopwatchABS):
                 return func(*args, **kwargs)
 
         async def awrapper(*args, **kwargs):
+            args, kwargs = get_arguments(func=func, args=args, kwargs=kwargs)
+
             a = args + self._args
             k = kwargs | self._kwargs
 
