@@ -25,7 +25,7 @@ class StopwatchNS(StopwatchABS):
         if self._kwargs:
             self._kwargs |= {"duration": self.duration()}
         else:
-            self._args = self._args + (self.duration(),)
+            self._args += (self.duration(),)
 
         if callable(self._callback):
             self._callback(*self._args, **self._kwargs)
@@ -36,19 +36,13 @@ class StopwatchNS(StopwatchABS):
         def wrapper(*args, **kwargs):
             args, kwargs = get_arguments(func=func, args=args, kwargs=kwargs)
 
-            a = args + self._args
-            k = kwargs | self._kwargs
-
-            with self.__class__(self._callback, *a, **k):
+            with self.__class__(self._callback, *args, **kwargs):
                 return func(*args, **kwargs)
 
         async def awrapper(*args, **kwargs):
             args, kwargs = get_arguments(func=func, args=args, kwargs=kwargs)
 
-            a = args + self._args
-            k = kwargs | self._kwargs
-
-            async with self.__class__(self._callback, *a, **k):
+            async with self.__class__(self._callback, *args, **kwargs):
                 return await func(*args, **kwargs)
 
         if iscoroutinefunction(func):
@@ -62,7 +56,7 @@ class StopwatchNS(StopwatchABS):
         if self._kwargs:
             self._kwargs |= {"duration": self.duration()}
         else:
-            self._args = self._args + (self.duration(),)
+            self._args += (self.duration(),)
 
         if callable(self._callback) and iscoroutinefunction(self._callback):
             await self._callback(*self._args, **self._kwargs)

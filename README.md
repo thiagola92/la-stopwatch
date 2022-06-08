@@ -165,27 +165,9 @@ def main():
 main()
 ```
 
-Under the hood decorators use context managers, so the basics about both are equal.  
-
-```python
-def on_finish(msg, duration, grade):
-    print(msg, duration, grade)
-
-
-@Stopwatch(on_finish, "Success", grade="A+")
-def main():
-    time.sleep(1)
-
-
-# Success 0:00:01.001084 A+
-main()
-```
-
-But yours functions and methods can receive arguments that you may find yourself wanting to use inside the callback. That's why the callback will include these arguments. Here is the order:  
+The callback needs to be identical to the decorated function but with the last argument being duration. Here is the order:  
 - Function arguments
-- Extra initialization arguments
 - Function keyword arguments
-- Extra initialization keyword arguments
 - Duration
     - Inside `kwargs` with the name `duration`
     - Or as last argument in case `kwargs` is empty
@@ -195,8 +177,8 @@ def on_finish(student, msg, duration, grade):
     print(student, msg, duration, grade)
 
 
-@Stopwatch(on_finish, "Success", grade="A+")
-def main(student):
+@Stopwatch(on_finish)
+def main(student, msg="Success", grade="A+"):
     time.sleep(1)
 
 
@@ -211,8 +193,8 @@ class Test():
     def on_finish(self, student, msg, duration, grade):
         print(student, msg, duration, grade)
     
-    @Stopwatch(on_finish, "Success", grade="A+")
-    def start(self, student):
+    @Stopwatch(on_finish)
+    def start(self, student, msg="Success", grade="A+"):
         time.sleep(1)
 
 # thiagola92 Success 0:00:01.000500 A+

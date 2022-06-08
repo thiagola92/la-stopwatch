@@ -121,23 +121,11 @@ class TestREADME(TestCase):
 
         ###############################################
 
-        def on_finish(msg, duration, grade):
-            print(msg, duration, grade)
-
-        @Stopwatch(on_finish, "Success", grade="A+")
-        def main():
-            time.sleep(1)
-
-        # Success 0:00:01.001084 A+
-        main()
-
-        ###############################################
-
         def on_finish(student, msg, duration, grade):
             print(student, msg, duration, grade)
 
-        @Stopwatch(on_finish, "Success", grade="A+")
-        def main(student):
+        @Stopwatch(on_finish)
+        def main(student, msg="Success", grade="A+"):
             time.sleep(1)
 
         # thiagola92 Success 0:00:01.000698 A+
@@ -149,8 +137,8 @@ class TestREADME(TestCase):
             def on_finish(self, student, msg, duration, grade):
                 print(student, msg, duration, grade)
 
-            @Stopwatch(on_finish, "Success", grade="A+")
-            def start(self, student):
+            @Stopwatch(on_finish)
+            def start(self, student, msg="Success", grade="A+"):
                 time.sleep(1)
 
         # thiagola92 Success 0:00:01.000500 A+
