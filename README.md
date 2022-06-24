@@ -187,8 +187,8 @@ class Test():
     def start(self, student, msg="Success", grade="A+"):
         time.sleep(1)
 
-# thiagola92 Success 0:00:01.000500 A+
-Test().start("thiagola92")
+# Bob Success 0:00:01.000500 A+
+Test().start("Bob")
 ```
 
 ## async
