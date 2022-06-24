@@ -51,17 +51,17 @@ Is possible to give a name for each record.
 stopwatch = Stopwatch()
 
 time.sleep(1)
-stopwatch.record("leo")
+stopwatch.record("first")
 
 time.sleep(1)
-stopwatch.record("thiago")
+stopwatch.record("second")
 
 time.sleep(1)
-stopwatch.record("matheus")
+stopwatch.record("third")
 
-print(stopwatch.get_record("leo"))  # 0:00:01.001374
-print(stopwatch.get_record("thiago"))  # 0:00:02.002231
-print(stopwatch.get_record("matheus"))  # 0:00:03.003551
+print(stopwatch.get_record("first"))  # 0:00:01.001374
+print(stopwatch.get_record("second"))  # 0:00:02.002231
+print(stopwatch.get_record("third"))  # 0:00:03.003551
 ```
 
 ## all records
@@ -74,14 +74,14 @@ time.sleep(1)
 stopwatch.record()
 
 time.sleep(1)
-stopwatch.record("hello")
+stopwatch.record("second")
 
 time.sleep(1)
 stopwatch.record()
 
 # {
 #   0: datetime.timedelta(seconds=1, microseconds=392),
-#   'hello': datetime.timedelta(seconds=2, microseconds=1447),
+#   'second': datetime.timedelta(seconds=2, microseconds=1447),
 #   1: datetime.timedelta(seconds=3, microseconds=2614)
 # }
 print(stopwatch.get_records())
@@ -121,12 +121,7 @@ with Stopwatch(print) as stopwatch:
     stopwatch.reset()
 ```
 
-The callback receive any extra arguments during initialization and the duration. In other words, callback receives:  
-- Extra initialization arguments
-- Extra initialization keyword arguments
-- Duration
-    - Inside `kwargs` with the name `duration`
-    - Or as last argument in case `kwargs` is empty
+The callback receive any extra arguments during `Stopwatch` initialization and the duration. Duration will be passed inside `kwargs` with the name duration **or** as last argument (in case `kwargs` is empty).  
 
 ```python
 def on_finish(msg, duration):
@@ -137,7 +132,7 @@ with Stopwatch(on_finish, "Success"):
     time.sleep(1)
 ```
 
-This order helps maintain `self` keyword first in classes methods.  
+It's okay to use inside a class with `self` keyword.  
 
 ```python
 class Test():
@@ -165,12 +160,7 @@ def main():
 main()
 ```
 
-The callback needs to be identical to the decorated function but with the last argument being duration. Here is the order:  
-- Function arguments
-- Function keyword arguments
-- Duration
-    - Inside `kwargs` with the name `duration`
-    - Or as last argument in case `kwargs` is empty
+The callback needs to be identical to the decorated function but with the last argument being duration. Duration will be passed inside `kwargs` with the name duration **or** as last argument (in case `kwargs` is empty).  
 
 ```python
 def on_finish(student, msg, duration, grade):
@@ -182,11 +172,11 @@ def main(student, msg="Success", grade="A+"):
     time.sleep(1)
 
 
-# thiagola92 Success 0:00:01.000698 A+
-main("thiagola92")
+# Bob Success 0:00:01.000698 A+
+main("Bob")
 ```
 
-You can't use `self` when decoratoring a method, but it's not a problema because following the logic you will receive all arguments from your method.  
+It's okay to use inside a class with `self` keyword.  
 
 ```python
 class Test():
