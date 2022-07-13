@@ -5,7 +5,7 @@ Measure the amount of time that elapses between *lap times*.
 `pip install la-stopwatch`  
 
 # usage
-There is two versions of stopwatch:  
+There are two versions of stopwatch:  
   - `StopwatchNS`
   - `Stopwatch`
 
