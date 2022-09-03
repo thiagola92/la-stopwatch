@@ -1,0 +1,31 @@
+name: Python package
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.10"]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pdm-project/setup-pdm@main
+        with:
+          python-version: ${{ matrix.python-version }}
+          enable-pep582: true
+      - run: pdm install
+      - run: pdm run sort
+      - run: pdm run tests
+      - run: |
+          if [ "$(git status --porcelain)" != "" ]
+          then
+            git config user.name actions
+            git config user.email actions@github.com
+            git commit -a -m "Workflow fix";
+            git push;
+          fi
