@@ -1,0 +1,41 @@
+[project]
+name = "la-stopwatch"
+version = "0.0.8"
+description = "Measure the amount of time that elapses between lap times"
+authors = [
+    {name = "thiagola92", email = "thiagola92@gmail.com"},
+]
+dependencies = []
+requires-python = ">=3.10"
+readme = "README.md"
+keywords = [
+    "stopwatch",
+    "timer",
+    "timing",
+    "clock"
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3.10",
+]
+license = {text = "MIT"}
+
+[project.urls]
+Homepage = "https://github.com/thiagola92/la-stopwatch"
+
+[tool.pdm]
+
+[tool.pdm.scripts]
+tests = "python -m unittest discover -v -f -s tests"
+sort = "python -m isort -v --ac ."
+
+[tool.pdm.dev-dependencies]
+lint = [
+    "black",
+    "isort"
+]
+
+[build-system]
+requires = ["pdm-pep517>=1.0.0"]
+build-backend = "pdm.pep517.api"
