@@ -1,6 +1,6 @@
 [project]
 name = "la-stopwatch"
-version = "0.0.8"
+version = "0.0.9"
 description = "Measure the amount of time that elapses between lap times"
 authors = [
     {name = "thiagola92", email = "thiagola92@gmail.com"},
