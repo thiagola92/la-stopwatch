@@ -27,8 +27,9 @@ Homepage = "https://github.com/thiagola92/la-stopwatch"
 [tool.pdm]
 
 [tool.pdm.scripts]
-tests = "python -m unittest discover -v -f -s tests"
-sort = "python -m isort -v --ac ."
+unittest = "python -m unittest discover -v -f -s tests"
+black = "python -m black ."
+isort = "python -m isort -v --ac ."
 
 [tool.pdm.dev-dependencies]
 lint = [

@@ -19,8 +19,9 @@ jobs:
           python-version: ${{ matrix.python-version }}
           enable-pep582: true
       - run: pdm install
-      - run: pdm run sort
-      - run: pdm run tests
+      - run: pdm run black
+      - run: pdm run isort
+      - run: pdm run unittest
       - run: |
           if [ "$(git status --porcelain)" != "" ]
           then
